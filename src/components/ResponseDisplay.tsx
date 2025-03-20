@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import CodeBlock from "./CodeBlock";
@@ -6,6 +5,7 @@ import DiagramDisplay from "./DiagramDisplay";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, User, Code, FileCode, PanelLeftClose, PanelLeftOpen, TextCursorInput } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import ReactMarkdown from 'react-markdown';
 
 export type ResponseType = 
   | { type: "text"; content: string }
@@ -208,7 +208,27 @@ const ResponseDisplay = ({ messages, className }: ResponseDisplayProps) => {
                   >
                     {item.type === "text" && (
                       <div className="prose prose-sm max-w-none">
-                        {item.content}
+                        <ReactMarkdown
+                          components={{
+                            h3: ({node, ...props}) => (
+                              <h3 className="text-xl font-bold my-4" {...props} />
+                            ),
+                            strong: ({node, ...props}) => (
+                              <strong className="font-semibold text-gray-900" {...props} />
+                            ),
+                            ul: ({node, ...props}) => (
+                              <ul className="list-disc pl-6 my-2" {...props} />
+                            ),
+                            li: ({node, ...props}) => (
+                              <li className="my-1" {...props} />
+                            ),
+                            code: ({node, ...props}) => (
+                              <code className="bg-gray-100 rounded px-1 py-0.5" {...props} />
+                            ),
+                          }}
+                        >
+                          {item.content}
+                        </ReactMarkdown>
                       </div>
                     )}
                     
