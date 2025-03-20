@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import CodeBlock from "./CodeBlock";
 import DiagramDisplay from "./DiagramDisplay";
+import PlantUMLRenderer from "./PlantUMLRenderer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bot, User, Code, FileCode, PanelLeftClose, PanelLeftOpen, TextCursorInput } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,8 @@ import ReactMarkdown from 'react-markdown';
 export type ResponseType = 
   | { type: "text"; content: string }
   | { type: "code"; content: string; language: string }
-  | { type: "diagram"; content: string; title?: string };
+  | { type: "diagram"; content: string; title?: string }
+  | { type: "plantuml"; content: string; title?: string };
 
 export interface Message {
   id: string;
@@ -35,8 +37,8 @@ const ResponseDisplay = ({ messages, className }: ResponseDisplayProps) => {
   );
   
   const diagrams = messages.flatMap(message => 
-    message.content.filter((item): item is { type: "diagram"; content: string; title?: string } => 
-      item.type === "diagram"
+    message.content.filter((item): item is { type: "diagram" | "plantuml"; content: string; title?: string } => 
+      item.type === "diagram" || item.type === "plantuml"
     )
   );
 
@@ -242,6 +244,13 @@ const ResponseDisplay = ({ messages, className }: ResponseDisplayProps) => {
                     {item.type === "diagram" && (
                       <DiagramDisplay
                         diagramSvg={item.content}
+                        title={item.title}
+                      />
+                    )}
+
+                    {item.type === "plantuml" && (
+                      <PlantUMLRenderer
+                        content={item.content}
                         title={item.title}
                       />
                     )}

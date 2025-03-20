@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from "uuid";
 import { Message, ResponseType } from "@/components/ResponseDisplay";
 
@@ -24,8 +23,6 @@ export const addDocument = (file: File): Promise<string> => {
 
 // Function to process a question and generate a response
 export const processQuestion = async (question: string): Promise<Message> => {
-  // In a real application, you would send the question to a backend service
-  // This is just a simulation
   return new Promise((resolve) => {
     setTimeout(() => {
       const responses: ResponseType[] = [];
@@ -36,23 +33,14 @@ export const processQuestion = async (question: string): Promise<Message> => {
         content: generateTextResponse(question),
       });
       
-      // Generate code response if needed
-      // if (shouldGenerateCode(question)) {
-      //   responses.push({
-      //     type: "code",
-      //     content: generateCodeSnippet(question),
-      //     language: determineLanguage(question),
-      //   });
-      // }
-      
-      // // Generate diagram if needed
-      // if (shouldGenerateDiagram(question)) {
-      //   responses.push({
-      //     type: "diagram",
-      //     content: generateDiagram(question),
-      //     title: `Diagram for ${question.substring(0, 20)}...`,
-      //   });
-      // }
+      // Generate PlantUML diagram if needed
+      if (shouldGenerateDiagram(question)) {
+        responses.push({
+          type: "plantuml",
+          content: generatePlantUMLDiagram(question),
+          title: `Diagram: ${question.substring(0, 30)}...`,
+        });
+      }
       
       resolve({
         id: uuidv4(),
@@ -62,6 +50,88 @@ export const processQuestion = async (question: string): Promise<Message> => {
       });
     }, 2000);
   });
+};
+
+// Helper function to determine if a diagram should be generated
+const shouldGenerateDiagram = (question: string): boolean => {
+  const diagramKeywords = [
+    'diagram',
+    'flow',
+    'sequence',
+    'architecture',
+    'process',
+    'workflow',
+    'structure',
+    'relationship',
+    'how does',
+    'how do',
+    'explain the flow',
+    'show me',
+    'visualize',
+    'class diagram',
+    'component diagram',
+  ];
+  
+  return diagramKeywords.some(keyword => 
+    question.toLowerCase().includes(keyword.toLowerCase())
+  );
+};
+
+// Helper function to generate PlantUML diagrams based on the question
+const generatePlantUMLDiagram = (question: string): string => {
+  // This is a simple example. In a real application, you would:
+  // 1. Parse the question to understand what type of diagram is needed
+  // 2. Generate appropriate PlantUML code based on the context
+  // 3. Possibly use AI to generate more accurate diagrams
+  
+  if (question.toLowerCase().includes('sequence')) {
+    return `@startuml
+participant User
+participant System
+participant Database
+
+User -> System: Request Data
+System -> Database: Query Data
+Database --> System: Return Results
+System --> User: Display Results
+@enduml`;
+  }
+  
+  if (question.toLowerCase().includes('class')) {
+    return `@startuml
+class User {
+  +id: string
+  +name: string
+  +email: string
+  +login()
+  +logout()
+}
+
+class Document {
+  +id: string
+  +title: string
+  +content: string
+  +upload()
+  +delete()
+}
+
+User "1" -- "*" Document: owns
+@enduml`;
+  }
+  
+  // Default to a simple process diagram
+  return `@startuml
+start
+:User Action;
+if (Valid Input?) then (yes)
+  :Process Data;
+  :Save Results;
+else (no)
+  :Show Error;
+endif
+:Display Response;
+stop
+@enduml`;
 };
 
 // Helper function to generate text response
@@ -283,164 +353,6 @@ public class AuthService
   };
   
   return snippets[language] || snippets.javascript;
-};
-
-// Helper function to determine if a diagram should be generated
-const shouldGenerateDiagram = (question: string): boolean => {
-  const diagramKeywords = ["diagram", "flow", "architecture", "system", "process", "structure", "relationship"];
-  return diagramKeywords.some(keyword => question.toLowerCase().includes(keyword));
-};
-
-// Helper function to generate a diagram
-const generateDiagram = (question: string): string => {
-  // In a real application, this would generate a proper diagram
-  // For this example, we'll return a simple SVG
-  
-  if (question.toLowerCase().includes("authentication") || question.toLowerCase().includes("login")) {
-    return `<svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .title { font: bold 16px sans-serif; }
-        .label { font: 12px sans-serif; }
-        .box { fill: white; stroke: #3b82f6; stroke-width: 2; }
-        .arrow { fill: none; stroke: #64748b; stroke-width: 2; }
-      </style>
-      
-      <!-- Title -->
-      <text x="250" y="30" text-anchor="middle" class="title">Authentication Flow</text>
-      
-      <!-- Boxes -->
-      <rect x="50" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="100" y="100" text-anchor="middle" class="label">Client</text>
-      
-      <rect x="200" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="250" y="100" text-anchor="middle" class="label">Auth API</text>
-      
-      <rect x="350" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="400" y="100" text-anchor="middle" class="label">Database</text>
-      
-      <rect x="200" y="200" width="100" height="60" rx="5" class="box" />
-      <text x="250" y="230" text-anchor="middle" class="label">JWT Service</text>
-      
-      <!-- Arrows -->
-      <path d="M150,90 H200" class="arrow" marker-end="url(#arrowhead)" />
-      <text x="175" y="85" text-anchor="middle" class="label" style="font-size: 10px">1. Login</text>
-      
-      <path d="M300,90 H350" class="arrow" marker-end="url(#arrowhead)" />
-      <text x="325" y="85" text-anchor="middle" class="label" style="font-size: 10px">2. Verify</text>
-      
-      <path d="M250,130 V200" class="arrow" marker-end="url(#arrowhead)" />
-      <text x="265" y="165" text-anchor="middle" class="label" style="font-size: 10px">3. Generate Token</text>
-      
-      <path d="M200,220 H100 V130" class="arrow" marker-end="url(#arrowhead)" />
-      <text x="125" y="180" text-anchor="middle" class="label" style="font-size: 10px">4. Return JWT</text>
-      
-      <!-- Arrow Marker -->
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-        </marker>
-      </defs>
-    </svg>`;
-  } else if (question.toLowerCase().includes("architecture") || question.toLowerCase().includes("system")) {
-    return `<svg width="500" height="350" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .title { font: bold 16px sans-serif; }
-        .label { font: 12px sans-serif; }
-        .box { fill: white; stroke: #3b82f6; stroke-width: 2; }
-        .service { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
-        .database { fill: #eff6ff; stroke: #3b82f6; stroke-width: 2; }
-        .arrow { fill: none; stroke: #64748b; stroke-width: 2; }
-      </style>
-      
-      <!-- Title -->
-      <text x="250" y="30" text-anchor="middle" class="title">Microservices Architecture</text>
-      
-      <!-- API Gateway -->
-      <rect x="175" y="50" width="150" height="40" rx="5" class="box" />
-      <text x="250" y="75" text-anchor="middle" class="label">API Gateway</text>
-      
-      <!-- Services -->
-      <rect x="50" y="150" width="100" height="60" rx="5" class="service" />
-      <text x="100" y="180" text-anchor="middle" class="label">User Service</text>
-      
-      <rect x="175" y="150" width="100" height="60" rx="5" class="service" />
-      <text x="225" y="180" text-anchor="middle" class="label">Content Service</text>
-      
-      <rect x="300" y="150" width="100" height="60" rx="5" class="service" />
-      <text x="350" y="180" text-anchor="middle" class="label">Analytics Service</text>
-      
-      <!-- Databases -->
-      <rect x="50" y="250" width="100" height="40" rx="5" class="database" />
-      <text x="100" y="275" text-anchor="middle" class="label">User DB</text>
-      
-      <rect x="175" y="250" width="100" height="40" rx="5" class="database" />
-      <text x="225" y="275" text-anchor="middle" class="label">Content DB</text>
-      
-      <rect x="300" y="250" width="100" height="40" rx="5" class="database" />
-      <text x="350" y="275" text-anchor="middle" class="label">Analytics DB</text>
-      
-      <!-- Arrows -->
-      <path d="M250,90 V120 H100 V150" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M250,90 V150" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M250,90 V120 H350 V150" class="arrow" marker-end="url(#arrowhead)" />
-      
-      <path d="M100,210 V250" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M225,210 V250" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M350,210 V250" class="arrow" marker-end="url(#arrowhead)" />
-      
-      <path d="M150,180 H175" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M275,180 H300" class="arrow" marker-end="url(#arrowhead)" />
-      
-      <!-- Arrow Marker -->
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-        </marker>
-      </defs>
-    </svg>`;
-  } else {
-    return `<svg width="500" height="300" xmlns="http://www.w3.org/2000/svg">
-      <style>
-        .title { font: bold 16px sans-serif; }
-        .label { font: 12px sans-serif; }
-        .box { fill: white; stroke: #3b82f6; stroke-width: 2; }
-        .arrow { fill: none; stroke: #64748b; stroke-width: 2; }
-      </style>
-      
-      <!-- Title -->
-      <text x="250" y="30" text-anchor="middle" class="title">System Process Flow</text>
-      
-      <!-- Boxes -->
-      <rect x="50" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="100" y="100" text-anchor="middle" class="label">Input</text>
-      
-      <rect x="200" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="250" y="100" text-anchor="middle" class="label">Processing</text>
-      
-      <rect x="350" y="70" width="100" height="60" rx="5" class="box" />
-      <text x="400" y="100" text-anchor="middle" class="label">Output</text>
-      
-      <rect x="125" y="180" width="100" height="60" rx="5" class="box" />
-      <text x="175" y="210" text-anchor="middle" class="label">Validation</text>
-      
-      <rect x="275" y="180" width="100" height="60" rx="5" class="box" />
-      <text x="325" y="210" text-anchor="middle" class="label">Storage</text>
-      
-      <!-- Arrows -->
-      <path d="M150,100 H200" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M300,100 H350" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M100,130 V210 H125" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M225,210 H275" class="arrow" marker-end="url(#arrowhead)" />
-      <path d="M325,180 V130 H300" class="arrow" marker-end="url(#arrowhead)" />
-      
-      <!-- Arrow Marker -->
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#64748b" />
-        </marker>
-      </defs>
-    </svg>`;
-  }
 };
 
 // Service to handle document management
