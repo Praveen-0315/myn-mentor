@@ -53,7 +53,7 @@ const Index = () => {
           <div className="mx-auto max-w-3xl text-center">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl leading-tight animate-fade-in pb-4">
               <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-                AI-Powered Onboarding
+                AI-Powered Mentor
               </span>
               <br />
               Assistant for Teams

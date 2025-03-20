@@ -21,7 +21,7 @@ const Chat = () => {
         content: [
           {
             type: "text",
-            content: "Hello! I'm your AI onboarding assistant. I've been trained on your team's documentation and can help answer questions, explain concepts, generate diagrams, and provide code examples. How can I help you today?"
+            content: "Hello! I'm your AI Mentor. I've been trained on your team's documentation and can help answer questions, explain concepts, generate diagrams, and provide code examples. How can I help you today?"
           }
         ],
         timestamp: new Date()

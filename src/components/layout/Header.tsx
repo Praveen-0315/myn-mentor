@@ -52,7 +52,7 @@ const Header = () => {
           <div className="w-8 h-8 rounded-md bg-primary/20 flex items-center justify-center">
             <div className="w-4 h-4 rounded-sm bg-primary animate-pulse-soft" />
           </div>
-          <span className="text-lg font-semibold tracking-tight">Onboard AI</span>
+          <span className="text-lg font-semibold tracking-tight">MynMentor AI</span>
         </div>
         
         {isMobile ? (

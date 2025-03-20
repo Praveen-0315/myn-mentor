@@ -171,7 +171,7 @@ const ResponseDisplay = ({ messages, className }: ResponseDisplayProps) => {
           >
             {sidebarOpen ? <PanelLeftClose className="h-4 w-4" /> : <PanelLeftOpen className="h-4 w-4" />}
           </Button>
-          <h2 className="text-sm font-medium">Onboard AI Assistant</h2>
+          <h2 className="text-sm font-medium">MynMentor</h2>
         </div>
         
         <div className="flex-1 overflow-y-auto p-4 space-y-6">

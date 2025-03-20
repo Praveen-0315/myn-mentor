@@ -8,7 +8,7 @@ const Footer = ({ className }: { className?: string }) => {
     <footer className={cn("w-full border-t py-6 backdrop-blur-lg bg-background/70", className)}>
       <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
         <p className="text-sm text-muted-foreground">
-          © {currentYear} Onboard AI. All rights reserved.
+          © {currentYear} MynMentor. All rights reserved.
         </p>
         <nav className="flex items-center space-x-4">
           <a href="#" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
