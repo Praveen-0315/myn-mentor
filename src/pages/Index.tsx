@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageLayout from "@/components/layout/PageLayout";
@@ -65,10 +64,11 @@ const Index = () => {
               Contextual answers, diagrams, and code examples — all tailored to your organization.
             </p>
             
-            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in opacity-0 [animation-delay:400ms]">
+            <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button
                 onClick={() => navigate("/admin")}
-                className="group rounded-full px-6 h-12 min-w-[180px]"
+                size="lg"
+                className="group rounded-full px-6 h-12 min-w-[180px] bg-primary hover:bg-primary/90"
               >
                 <span>Get Started</span>
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -77,7 +77,8 @@ const Index = () => {
               <Button
                 onClick={() => navigate("/chat")}
                 variant="outline"
-                className="rounded-full border-primary/20 px-6 h-12 min-w-[180px]"
+                size="lg"
+                className="rounded-full px-6 h-12 min-w-[180px] border-primary/20 hover:bg-primary/5"
               >
                 Try the Assistant
               </Button>
