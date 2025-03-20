@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import PageLayout from "@/components/layout/PageLayout";
 import FileUpload from "@/components/FileUpload";
@@ -24,11 +23,12 @@ const Admin = () => {
   }, []);
 
   const loadDocuments = async () => {
-    setIsLoading(true);
     try {
+      setIsLoading(true);
       const docs = await getDocuments();
       setDocuments(docs);
     } catch (error) {
+      console.error("Error loading documents:", error);
       toast({
         title: "Error",
         description: "Failed to load documents. Please try again.",
@@ -49,6 +49,7 @@ const Admin = () => {
         description: `${files.length} document${files.length !== 1 ? "s" : ""} uploaded successfully.`,
       });
     } catch (error) {
+      console.error("Error uploading documents:", error);
       toast({
         title: "Upload Failed",
         description: "There was an error uploading your documents.",
@@ -62,6 +63,7 @@ const Admin = () => {
       await deleteDocument(id);
       setDocuments((prev) => prev.filter((doc) => doc.id !== id));
     } catch (error) {
+      console.error("Error deleting document:", error);
       toast({
         title: "Delete Failed",
         description: "There was an error deleting the document.",
@@ -96,8 +98,8 @@ const Admin = () => {
     <PageLayout>
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight animate-fade-in">Admin Dashboard</h1>
-          <p className="text-muted-foreground mt-2 animate-fade-in opacity-0 [animation-delay:100ms]">
+          <h1 className="text-3xl font-bold tracking-tight">Admin Dashboard</h1>
+          <p className="text-muted-foreground mt-2">
             Manage your documents and train the AI assistant.
           </p>
         </div>
@@ -105,7 +107,7 @@ const Admin = () => {
         <Tabs
           value={activeTab}
           onValueChange={setActiveTab}
-          className="w-full animate-fade-in opacity-0 [animation-delay:200ms]"
+          className="w-full"
         >
           <TabsList className="grid w-full max-w-md grid-cols-2">
             <TabsTrigger value="documents">Documents</TabsTrigger>
@@ -182,11 +184,16 @@ const Admin = () => {
               </Card>
             </div>
 
-            <DocumentList
-              documents={documents}
-              onDeleteDocument={handleDeleteDocument}
-              className="animate-fade-in opacity-0 [animation-delay:300ms]"
-            />
+            {isLoading ? (
+              <div className="flex items-center justify-center py-8">
+                <RefreshCcw className="h-6 w-6 animate-spin text-muted-foreground" />
+              </div>
+            ) : (
+              <DocumentList
+                documents={documents}
+                onDeleteDocument={handleDeleteDocument}
+              />
+            )}
           </TabsContent>
 
           <TabsContent value="settings" className="space-y-6 mt-6">
