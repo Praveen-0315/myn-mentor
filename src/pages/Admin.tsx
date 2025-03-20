@@ -10,6 +10,7 @@ import { ArrowRight, RefreshCcw, Database, Shield } from "lucide-react";
 import { uploadDocuments, getDocuments, deleteDocument } from "@/utils/documentService";
 import { Document } from "@/components/DocumentList";
 import { cn } from "@/lib/utils";
+import { playTrainSound, initializeAudio } from "@/utils/audioService";
 
 const Admin = () => {
   const [activeTab, setActiveTab] = useState("documents");
@@ -20,6 +21,8 @@ const Admin = () => {
 
   useEffect(() => {
     loadDocuments();
+    // Initialize audio when component mounts
+    initializeAudio();
   }, []);
 
   const loadDocuments = async () => {
@@ -72,7 +75,7 @@ const Admin = () => {
     }
   };
 
-  const handleTrainModel = () => {
+  const handleTrainModel = async () => {
     if (documents.length === 0) {
       toast({
         title: "No Documents",
@@ -83,6 +86,13 @@ const Admin = () => {
     }
     
     setIsTraining(true);
+    
+    try {
+      await playTrainSound();
+      console.log('Train sound triggered');
+    } catch (error) {
+      console.error('Error with train sound:', error);
+    }
     
     // Simulate training process
     setTimeout(() => {
